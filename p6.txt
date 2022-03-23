@@ -1,0 +1,44 @@
+
+#6. Write a program to implement the naïve Bayesian classifier for a sample training
+#data set stored as a .CSV file. Compute the accuracy of the classifier, considering few
+#test data sets.
+
+
+import pandas as pd
+
+PlayTennis = pd.read_csv("4.csv")
+print("Given dataset:\n", PlayTennis,"\n")
+
+from sklearn.preprocessing import LabelEncoder
+Le = LabelEncoder()
+
+PlayTennis['outlook'] = Le.fit_transform(PlayTennis['outlook'])
+PlayTennis['temp'] = Le.fit_transform(PlayTennis['temp'])
+PlayTennis['humidity'] = Le.fit_transform(PlayTennis['humidity'])
+PlayTennis['wind'] = Le.fit_transform(PlayTennis['wind'])
+PlayTennis['play'] = Le.fit_transform(PlayTennis['play'])
+
+print("the encoded dataset is:\n",PlayTennis)
+
+X = PlayTennis.drop(['play'],axis=1) 
+y = PlayTennis['play']              
+
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.20)
+print("\n X_train:\n",X_train)
+print("\n y_train:\n",y_train)
+print("\n X_test:\n",X_test)
+print("\n y_test:\n",y_test)
+
+classifier = GaussianNB()
+classifier.fit(X_train,y_train)
+
+accuracy = accuracy_score(classifier.predict(X_test),y_test)
+print("\n Accuracy is:",accuracy)
+
+
+
+
